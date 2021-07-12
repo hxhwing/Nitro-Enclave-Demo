@@ -72,7 +72,8 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
   "MemoryMiB": 2600
 }
 ```
-请记录下您的**EnclaveCID**  
+请记录下您的```EnclaveCID```  
+
 8. 再打开一个instance 窗口，运行**vsock-proxy** 工具  
 ```bash
 vsock-proxy 8000 kms.us-east-1.amazonaws.com 443  
