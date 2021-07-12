@@ -1,4 +1,10 @@
 ## Enclave 中进行生成密钥并加密解密随机数
+
+## Diagram
+
+![Architecture](./docs/assets/Architecture.png)
+
+**注意：该Demo运行在us-east-1区域**
 1. 新建支持enclave功能的ec2 instance  
 2. 安装nitro-cli包  
 ```bash
@@ -19,21 +25,25 @@ sudo yum install -y aws-nitro-enclaves-cli aws-nitro-enclaves-cli-devel
 # memory_mib: 512  
 memory_mib: 3000   
 ```  
-4. 再运行  
+4. 重新启动服务
 ```bash    
 sudo systemctl start nitro-enclaves-allocator.service && sudo systemctl enable nitro-enclaves-allocator.service   
 sudo systemctl start docker && sudo systemctl enable docker   
 ```
 5. Reboot 你的 instance   
-   
-6.   
+```
+sudo shutdown -r now
+```
+
+6. 下载代码，build容器镜像
 ```bash   
 yum install git    
-git clone -b encode_decode https://github.com/hyoer0423/nitro-enclave-python-demo.git    
+git clone https://github.com/hxhwing/Nitro-Enclave-Demo.git
+cd Nitro-Enclave-Demo/server  
+docker build .
 ```
-7. 进入server文件夹   
+7. 运行build.sh创建enclave image，并利用image创建enclave
 ```bash    
-cd nitro-enclave-python-demo/encode_decode/server   
 chmod +x build.sh  
 sudo ./build.sh   
 ```   
@@ -63,7 +73,7 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
 }
 ```
 请记录下您的**EnclaveCID**  
-8.再打开一个instance 窗口，运行**vsock-proxy** 工具  
+8. 再打开一个instance 窗口，运行**vsock-proxy** 工具  
 ```bash
 vsock-proxy 8000 kms.us-east-1.amazonaws.com 443  
 ```   
