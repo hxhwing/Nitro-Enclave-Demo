@@ -1,4 +1,4 @@
-## Enclave 中进行生成密钥并加密解密随机数
+## 在 Enclave 中进行创建密钥，并利用密钥完成随机数加解密
 
 ## Diagram
 
@@ -35,12 +35,11 @@ sudo systemctl start docker && sudo systemctl enable docker
 sudo shutdown -r now
 ```
 
-6. 下载代码，build容器镜像
+6. 下载代码
 ```bash   
 yum install git    
 git clone https://github.com/hxhwing/Nitro-Enclave-Demo.git
 cd Nitro-Enclave-Demo/server  
-docker build .
 ```
 7. 运行build.sh创建enclave image，并利用image创建enclave
 ```bash    
@@ -78,9 +77,13 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
 ```bash
 vsock-proxy 8000 kms.us-east-1.amazonaws.com 443  
 ```   
+
 9. 进入client文件夹    
-cd nitro-enclave-python-demo/encode_decode/client    
-10.下载相关包并运行文件     
+```
+cd Nitro-Enclave-Demo/client    
+```
+
+10. 下载相关包并运行文件     
 ```bash     
 yum install python3 -y
 python3 -m venv venv
