@@ -85,7 +85,7 @@ See [Architecture diagram](https://github.com/richardfan1126/nitro-enclave-pytho
 1. Open a new SSH session, run the `vsock-proxy` tool
 
    ```
-   $ vsock-proxy 8000 kms.us-east-1.amazonaws.com 443
+   $ vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443
    ```
 
 1. Open another SSH session, install python3 and the necessary packages for running client app

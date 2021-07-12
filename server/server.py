@@ -10,7 +10,7 @@ def aws_api_call(credential):
 
     client = boto3.client(
         'kms',
-        region_name = 'us-east-1',
+        region_name = 'ap-northeast-1',
         aws_access_key_id = credential['access_key_id'],
         aws_secret_access_key = credential['secret_access_key'],
         aws_session_token = credential['token']

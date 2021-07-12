@@ -4,7 +4,7 @@
 
 ![Architecture](./docs/assets/Architecture.png)
 
-**注意：该Demo运行在us-east-1区域**
+**注意：该Demo运行在ap-northeast-1区域**
 1. 新建支持enclave功能的ec2 instance  
 2. 安装nitro-cli包  
 ```bash
@@ -75,7 +75,7 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
 
 8. 再打开一个instance 窗口，运行**vsock-proxy** 工具  
 ```bash
-vsock-proxy 8000 kms.us-east-1.amazonaws.com 443  
+vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443  
 ```   
 
 9. 进入client文件夹    

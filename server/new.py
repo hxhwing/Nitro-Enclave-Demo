@@ -23,7 +23,7 @@ def create_cmk(desc='Customer Master Key'):
     """
 
     # Create CMK
-    region_name = "us-east-1"
+    region_name = "ap-northeast-1"
     session1 = boto3.session.Session(aws_access_key_id='',aws_secret_access_key='',region_name=region_name)
 
     kms_client = session1.client('kms')
@@ -86,7 +86,7 @@ def main():
     # while True:
         
         
-    #     keyid = "arn:aws:kms:us-east-1:196375779214:key/2e6e1837-23af-4ddb-b588-c4beacdf5468"
+    #     keyid = "arn:aws:kms:ap-northeast-1:196375779214:key/2e6e1837-23af-4ddb-b588-c4beacdf5468"
     #     print(keyid)
         
     #     try:
