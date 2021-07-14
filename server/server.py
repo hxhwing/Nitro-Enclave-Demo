@@ -24,8 +24,8 @@ def aws_api_call(credential, keyid):
     source_plaintext=str.encode(source_plaintext)
     #source_plaintext="Hello, KMS\!"
     ciphertext = client.encrypt(Plaintext=source_plaintext, KeyId=keyid,EncryptionAlgorithm='SYMMETRIC_DEFAULT')
-    cycled_plaintext = client.decrypt(CiphertextBlob=ciphertext['CiphertextBlob'], KeyId=keyid,EncryptionAlgorithm='SYMMETRIC_DEFAULT')
-    print(cycled_plaintext)
+    # cycled_plaintext = client.decrypt(CiphertextBlob=ciphertext['CiphertextBlob'], KeyId=keyid,EncryptionAlgorithm='SYMMETRIC_DEFAULT')
+    # print(cycled_plaintext)
     str_cipher=base64.b64encode(ciphertext['CiphertextBlob'])
     print(str_cipher.decode('utf-8'),type(str_cipher.decode('utf-8')))
     # Call the standalone kmstool through subprocess
@@ -49,8 +49,7 @@ def aws_api_call(credential, keyid):
     result={
         'Plaintext':source_plaintext,
         'Ciphertext': str_cipher.decode('utf-8'),
-        'Encrypted-CLI': (base64.b64decode(result)).decode(),
-        'Encrypted—KMS':cycled_plaintext['Plaintext'].decode()
+        'Encrypted-Plaintext': (base64.b64decode(result)).decode(),
     }
     return result
 
