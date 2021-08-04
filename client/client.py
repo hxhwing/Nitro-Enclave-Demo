@@ -2,6 +2,8 @@ import sys
 import socket
 import requests
 import json
+import base64
+import subprocess
 
 def get_aws_session_token():
     """
@@ -22,29 +24,52 @@ def get_aws_session_token():
     return credential
 
 def main():
-    # Get EC2 instance metedata
-    credential = get_aws_session_token()
+    # Start vsock-proxy in background process
+    vsock_proxy_process = subprocess.Popen(
+        [
+            'vsock-proxy',
+            '8000',
+            'kms.ap-northeast-1.amazonaws.com',
+            '443'
+        ]
+    )
 
-    # Create a vsock socket object
-    s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
-    
-    # Get CID from command line parameter
-    cid = int(sys.argv[1])
+    try:
+        # Get EC2 instance metedata
+        credential = get_aws_session_token()
 
-    # The port should match the server running in enclave
-    port = 5000
+        # Create a vsock socket object
+        s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
+        
+        # Get CID from command line parameter
+        cid = int(sys.argv[1])
 
-    # Connect to the server
-    s.connect((cid, port))
+        # Get ciphertext from shell input
+        ciphertext = sys.argv[2]
 
-    # Send AWS credential to the server running in enclave
-    s.send(str.encode(json.dumps(credential)))
-    
-    # receive data from the server
-    print(s.recv(1024).decode())
+        # The port should match the server running in enclave
+        port = 5000
 
-    # close the connection 
-    s.close()
+        # Connect to the server
+        s.connect((cid, port))
+
+        # Send AWS credential and ciphertext to the server running in enclave
+        s.send(str.encode(json.dumps({
+            'credential': credential,
+            'ciphertext': ciphertext,
+        })))
+        
+        # receive data from the server
+        response = s.recv(65536).decode()
+
+        #plaintext = base64.b64decode(response['Plaintext']).decode()
+        print(response)
+
+        # close the connection 
+        s.close()
+    finally:
+        # Kill the vsock-proxy
+        vsock_proxy_process.kill()
 
 if __name__ == '__main__':
     main()

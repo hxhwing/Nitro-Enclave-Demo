@@ -89,6 +89,6 @@ yum install python3 -y
 python3 -m venv venv
 source venv/bin/activate
 sudo pip3 install -r requirements.txt
-sudo python3 client.py [EnclaveCID]
+sudo python3 client.py [EnclaveCID] [KEY_ARN]
 ```
   
