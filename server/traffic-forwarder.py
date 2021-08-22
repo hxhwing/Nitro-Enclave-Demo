@@ -1,3 +1,5 @@
+### Full credit for this file goes to Richard Fan @ https://github.com/richardfan1126/nitro-enclave-python-demo
+
 import socket
 import sys
 import threading

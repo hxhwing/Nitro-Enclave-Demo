@@ -1,12 +1,12 @@
-## 在 Enclave 中进行创建密钥，并利用密钥完成随机数加解密
+# Nitro Enclave and Attestation Demo
 
 ## Diagram
 
 ![Architecture](./docs/assets/Architecture.png)
 
-**注意：该Demo运行在us-east-1区域**
-1. 新建支持enclave功能的ec2 instance  
-2. 安装nitro-cli包  
+**注意：该Demo运行在ap-northeast-1区域**
+1. 启动支持 Nitro Enclave 功能的 EC2 Instance
+2. 安装 Nitro-CLI 命令行工具 
 ```bash
 sudo amazon-linux-extras install aws-nitro-enclaves-cli  
 sudo yum install aws-nitro-enclaves-cli-devel -y  
@@ -73,9 +73,9 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
 ```
 请记录下您的```EnclaveCID```  
 
-8. 再打开一个instance 窗口，运行**vsock-proxy** 工具  
+8. 再打开一个EC2 Instance 窗口，在后台运行 **vsock-proxy** 工具  
 ```bash
-vsock-proxy 8000 kms.us-east-1.amazonaws.com 443  
+vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443 &
 ```   
 
 9. 进入client文件夹    
@@ -83,12 +83,12 @@ vsock-proxy 8000 kms.us-east-1.amazonaws.com 443
 cd Nitro-Enclave-Demo/client    
 ```
 
-10. 下载相关包并运行文件     
+10. 下载相关包并运行 ```client.py```文件     
 ```bash     
 yum install python3 -y
 python3 -m venv venv
 source venv/bin/activate
 sudo pip3 install -r requirements.txt
-sudo python3 client.py [EnclaveCID]
+sudo python3 client.py [EnclaveCID] keyId
 ```
   
