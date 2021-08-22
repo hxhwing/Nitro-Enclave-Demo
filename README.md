@@ -5,8 +5,13 @@
 ![Architecture](./docs/assets/Architecture.png)
 
 **注意：该Demo运行在ap-northeast-1区域**
+<<<<<<< HEAD
 1. 启动支持 Nitro Enclave 功能的 EC2 Instance
 2. 安装 Nitro-CLI 命令行工具 
+=======
+1. 新建支持enclave功能的ec2 instance  
+2. 安装nitro-cli包  
+>>>>>>> 2158f18186f1d166e19422dce6098c4c97de9615
 ```bash
 sudo amazon-linux-extras install aws-nitro-enclaves-cli  
 sudo yum install aws-nitro-enclaves-cli-devel -y  
@@ -75,7 +80,11 @@ Started enclave with enclave-cid: 16, memory: 2600 MiB, cpu-ids: [1, 17]
 
 8. 再打开一个EC2 Instance 窗口，在后台运行 **vsock-proxy** 工具  
 ```bash
+<<<<<<< HEAD
 vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443 &
+=======
+vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443  
+>>>>>>> 2158f18186f1d166e19422dce6098c4c97de9615
 ```   
 
 9. 进入client文件夹    
