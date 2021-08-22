@@ -2,7 +2,7 @@
 
 ## Diagram
 
-![Architecture](./docs/assets/Architecture.png)
+![Architecture](./pics/Architecture.png)
 
 **注意：该Demo运行在ap-northeast-1区域**
 <<<<<<< HEAD
@@ -11,8 +11,7 @@
 =======
 1. 新建支持enclave功能的ec2 instance  
 2. 安装nitro-cli包  
->>>>>>> 2158f18186f1d166e19422dce6098c4c97de9615
-```bash
+```
 sudo amazon-linux-extras install aws-nitro-enclaves-cli  
 sudo yum install aws-nitro-enclaves-cli-devel -y  
 sudo usermod -aG ne ec2-user  
