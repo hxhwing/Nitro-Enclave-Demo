@@ -9,7 +9,7 @@ pkill vsock-proxy
 
 
 docker build -t kms-demo:latest .
-nitro-cli build-enclave --docker-uri kms-demo:latest  --output-file kms-demo.eif
+nitro-cli build-enclave --docker-uri kms-demo:latest  --output-file kms-demo.eif > EnclaveImage.log
 
 vsock-proxy 8000 kms.ap-northeast-1.amazonaws.com 443 &
 

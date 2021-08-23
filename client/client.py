@@ -12,8 +12,7 @@ def get_aws_session_token():
     r = requests.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/")
     instance_profile_name = r.text
 
-    r = requests.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/%s" % instance_pro
-file_name)
+    r = requests.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/%s" % instance_profile_name)
     response = r.json()
 
     credential = {
@@ -25,52 +24,38 @@ file_name)
     return credential
 
 def main():
-    # Start vsock-proxy in background process
-    # vsock_proxy_process = subprocess.Popen(
-    #     [
-    #         'vsock-proxy',
-    #         '8000',
-    #         'kms.ap-northeast-1.amazonaws.com',
-    #         '443'
-    #     ]
-    # )
+    # Get EC2 instance metedata
+    credential = get_aws_session_token()
 
-    try:
-        # Get EC2 instance metedata
-        credential = get_aws_session_token()
+    # Create a vsock socket object
+    s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
 
-        # Create a vsock socket object
-        s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
+    # Get CID from command line parameter
+    cid = int(sys.argv[1])
 
-        # Get CID from command line parameter
-        cid = int(sys.argv[1])
+    # Get KMS KeyID 
+    keyid = sys.argv[2]
 
-        # Get ciphertext from shell input
-        keyid = sys.argv[2]
+    # The port should match the server running in enclave
+    port = 5000
 
-        # The port should match the server running in enclave
-        port = 5000
+    # Connect to the server
+    s.connect((cid, port))
 
-        # Connect to the server
-        s.connect((cid, port))
+    # Send AWS credential and KMS KeyID to the server running in enclave
+    s.send(str.encode(json.dumps({
+        'credential': credential,
+        'keyid': keyid,
+    })))
 
-        # Send AWS credential and ciphertext to the server running in enclave
-        s.send(str.encode(json.dumps({
-            'credential': credential,
-            'keyid': keyid,
-        })))
+    # receive data from the server
+    response = s.recv(65536).decode()
 
-        # receive data from the server
-        response = s.recv(65536).decode()
+    #plaintext = base64.b64decode(response['Plaintext']).decode()
+    print(response)
 
-        #plaintext = base64.b64decode(response['Plaintext']).decode()
-        print(response)
-
-        # close the connection
-        s.close()
-    # finally:
-    #     # Kill the vsock-proxy
-    #     vsock_proxy_process.kill()
+    # close the connection
+    s.close()
 
 if __name__ == '__main__':
     main()

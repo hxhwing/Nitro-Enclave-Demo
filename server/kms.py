@@ -58,7 +58,7 @@ class NitroKms():
             self._aws_session_token = credentials['aws_session_token']
 
     def kms_generate_random(self, number_of_bytes):
-        """Call the KMS GenerateRandom API."""
+        """Call the KMS GenerateRandom API with attestation."""
         if not isinstance(number_of_bytes, int):
             raise ValueError('number_of_bytes must be an integer')
         if number_of_bytes < 1 or number_of_bytes > 1024:
@@ -72,10 +72,26 @@ class NitroKms():
                 'AttestationDocument': self._get_attestation_doc_b64()
             }
         })
-        return self._kms_call(amz_target, request_parameters)
+        kms_response = self._kms_call(amz_target, request_parameters)
+        """
+        If Recipient is specified in the Request, 
+        then CiphertextForRecipient is returned instead of Plaintext, 
+        which the requester has to decrypt with the private key 
+        corresponding to the public key contained in the Recipient's AttestationDocument field.
+        """       
+        ciphertext_for_recipient_b64 = kms_response['CiphertextForRecipient']
+        ciphertext_for_recipient = base64.b64decode(ciphertext_for_recipient_b64)
+
+        enveloped_data = self._cms_parse_enveloped_data(ciphertext_for_recipient)
+        (encrypted_symm_key, init_vector, block_size, ciphertext_out) = enveloped_data
+        decrypted_symm_key = self._rsa_decrypt(self._rsa_key, encrypted_symm_key)
+        plaintext_bytes = self._aws_cms_cipher_decrypt(
+            ciphertext_out, decrypted_symm_key, block_size, init_vector
+        )
+        return plaintext_bytes
 
     def kms_generate_data_key(self, number_of_bytes, kms_key_id):
-        """Call the KMS GenerateRandom API."""
+        """Call the KMS GenerateDataKey API with attestation."""
         if not isinstance(number_of_bytes, int):
             raise ValueError('number_of_bytes must be an integer')
         if number_of_bytes < 1 or number_of_bytes > 1024:
@@ -90,6 +106,36 @@ class NitroKms():
                 'AttestationDocument': self._get_attestation_doc_b64()
             }
         })
+        kms_response = self._kms_call(amz_target, request_parameters)
+        """
+        If Recipient is specified in the Request, 
+        then CiphertextForRecipient is returned instead of Plaintext, 
+        which the requester has to decrypt with the private key 
+        corresponding to the public key contained in the Recipient's AttestationDocument field.
+        """
+        ciphertext_for_recipient_b64 = kms_response['CiphertextForRecipient']
+        ciphertext_for_recipient = base64.b64decode(ciphertext_for_recipient_b64)
+
+        enveloped_data = self._cms_parse_enveloped_data(ciphertext_for_recipient)
+        (encrypted_symm_key, init_vector, block_size, ciphertext_out) = enveloped_data
+        decrypted_symm_key = self._rsa_decrypt(self._rsa_key, encrypted_symm_key)
+        plaintext_bytes = self._aws_cms_cipher_decrypt(
+            ciphertext_out, decrypted_symm_key, block_size, init_vector
+        )
+        return plaintext_bytes
+
+    def kms_generate_data_key_norecipent(self, number_of_bytes, kms_key_id):
+        """Call the KMS GenerateDatakey API without attestation."""
+        if not isinstance(number_of_bytes, int):
+            raise ValueError('number_of_bytes must be an integer')
+        if number_of_bytes < 1 or number_of_bytes > 1024:
+            raise ValueError('number_of_bytes must be between 1 and 1024 (inclusive)')
+
+        amz_target = 'TrentService.GenerateDataKey'
+        request_parameters = json.dumps({
+            "NumberOfBytes": number_of_bytes,
+            "KeyId": kms_key_id
+        })
         return self._kms_call(amz_target, request_parameters)
 
     def kms_encrypt(self, plaintext_bytes, kms_key_id):
@@ -102,7 +148,7 @@ class NitroKms():
         return self._kms_call(amz_target, request_parameters)
 
     def kms_decrypt(self, ciphertext_blob):
-        """Call the KMS Decrypt API."""
+        """Call the KMS Decrypt API with attestation."""
         amz_target = 'TrentService.Decrypt'
         request_parameters = json.dumps({
             'CiphertextBlob': ciphertext_blob,
