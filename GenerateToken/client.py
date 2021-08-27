@@ -8,9 +8,9 @@ import boto3
 
 """
 How to use this?
-python3 client.py <enclave-id> <KMS Key-id> <UserID>
+python3 client.py <KMS Key-id> <UserID>
 e.g.:
-python3 client.py 15 alias/encalve u001
+python3 client.py alias/encalve u001
 """
 
 def get_aws_session_token():
@@ -39,13 +39,13 @@ def main():
     s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
 
     # Get CID from command line parameter
-    cid = int(sys.argv[1])
+    # cid = int(sys.argv[1])
 
     # Get KMS KeyID 
-    keyid = sys.argv[2]
+    keyid = sys.argv[1]
 
     # Get UserID 
-    userid = sys.argv[3]
+    userid = sys.argv[2]
 
     # The port should match the server running in enclave
     port = 5000

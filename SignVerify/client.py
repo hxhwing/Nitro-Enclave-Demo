@@ -11,9 +11,9 @@ import hashlib
 
 """
 How to use this?
-python3 client.py <enclave-id> <userid> <'Message to be signed'>
+python3 client.py <userid> <'Message to be signed'>
 e.g.:
-python3 client.py 15 u005 'Message to be signed'
+python3 client.py u005 'Message to be signed'
 """
 
 def get_aws_session_token():
@@ -42,16 +42,16 @@ def main():
     s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
 
     # Get CID from command line parameter
-    cid = int(sys.argv[1])
+    # cid = int(sys.argv[1])
 
     # # Get KMS KeyID 
     # keyid = sys.argv[2]
 
     # Get UserID 
-    userid = sys.argv[2]
+    userid = sys.argv[1]
 
     # Get message to be signed 
-    message = sys.argv[3]
+    message = sys.argv[2]
 
     # The port should match the server running in enclave
     port = 5000
