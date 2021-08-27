@@ -51,7 +51,7 @@ def main():
     userid = sys.argv[2]
 
     # Get message to be signed 
-    message = sys.argv[2]
+    message = sys.argv[3]
 
     # The port should match the server running in enclave
     port = 5000
@@ -62,7 +62,7 @@ def main():
     try:
         Item = table.get_item(Key={'userid': userid})
     except Exception as error:
-        print(error)
+        print('Item not found from DynamoDB')
 
     # Get public_key from DynamoDB
     public_key = Item['Item']['publickey']
@@ -89,9 +89,9 @@ def main():
     # Get signed message from Enclave, and verify the signing with Verifying key(public_key)
     bmessage = bytes(message, 'utf-8') 
     if vk.verify(response, bmessage): # True
-        print('Signed message verified by public key: ' + True)
+        print('Signed message verified by public key: True')
     else:
-        print('Signed message verified by public key: ' + False)
+        print('Signed message verified by public key: False')
 
     # close the connection
     s.close()

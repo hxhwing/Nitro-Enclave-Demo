@@ -80,6 +80,7 @@ def main():
 
         # Get message to be signed from Socket
         message = client_request['message']
+        print('Message Received:  '+ message)
 
         # Set environment variables
         nitro_kms.set_region('ap-northeast-1')
