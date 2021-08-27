@@ -1,6 +1,6 @@
 FROM amazonlinux
 
-RUN yum install python3 gcc net-tools -y
+RUN yum install python3 gcc net-tools rng-tools -y
 
 WORKDIR /app
 
