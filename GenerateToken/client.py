@@ -38,8 +38,8 @@ def main():
     # Create a vsock socket object
     s = socket.socket(socket.AF_VSOCK, socket.SOCK_STREAM)
 
-    # Get CID from command line parameter
-    # cid = int(sys.argv[1])
+    # Fixed cid
+    cid = int(10)
 
     # Get KMS KeyID 
     keyid = sys.argv[1]
