@@ -61,8 +61,12 @@ def main():
     table = ddb.Table('UserToken')
     try:
         Item = table.get_item(Key={'userid': userid})
+        if 'Item' not in Item:
+            print('userid ' + userid + ' not found in DynamoDB')
+            return
     except Exception as error:
-        print('Item not found from DynamoDB')
+        print(error)
+        return
 
     # Get public_key from DynamoDB
     public_key = Item['Item']['publickey']

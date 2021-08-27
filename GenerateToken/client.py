@@ -74,6 +74,7 @@ def main():
         print('Write User Token to DynamoDB Successfully')
     except Exception as error:
         print(error)
+        return
 
     # close the connection
     s.close()
