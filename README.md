@@ -1,8 +1,12 @@
 # Nitro Enclave and Attestation Demo
 
-## Diagram
+## Nitro Enclave Architecture
 
-![Architecture](./pics/Architecture.png)
+![Architecture](./pics/NitroEnclave-Architecture.png)
+
+## Nitro Enclave Sample
+
+![Sample-Architecture](./pics/NitroEnclave-Sample-Architecture.png)
 
 **注意：该Demo运行在ap-northeast-1区域**
 <<<<<<< HEAD
