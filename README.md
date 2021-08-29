@@ -312,4 +312,8 @@ Signed message verified by public key: True
 
 来自第二台 Enclave 请求 kms:Decrypt 的 CloudTrail：
 ![CloudTrail-2](./pics/011.png)
+
+## License
+
+This project is licensed under the Apache-2.0 License.
   
